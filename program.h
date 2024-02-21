@@ -16,6 +16,12 @@ public:
             numTotal = arith + store + load + branch;
         }
 
+    //overloaded constructor:
+    Program(int total, double arith, double store, double load)
+        : numTotal(total), numArith(arith * total), numStore(store * total), numLoad(load * total) {
+            numBranch = total * (1 - (arith + store + load));
+        }
+
     // Member function to print the program's stats
     void printStats() const;
 };
