@@ -1,11 +1,6 @@
 #include "program.h"
 #include <iostream>
 
-// Constructor implementation
-Program::Program(int arith, int store, int load, int branch)
-    : numArith(arith), numStore(store), numLoad(load), numBranch(branch) {
-        numTotal = arith + store + load + branch;
-}
 
 // Member function to print the program's stats
 void Program::printStats() const {
