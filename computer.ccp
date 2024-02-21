@@ -33,3 +33,22 @@ double Computer::calculateExecutionTime(Program program) {
     return totalTime;
 
 }
+
+// Implementation of the calculateglobalMIPS member function
+double Computer::calculateglobalMIPS() {
+    // Global MIPS calculation based on instruction counts
+    double globalMIPS = (clockRateGHz * 1e3)/ Computer::calculateGlobalCPI();
+
+    return globalMIPS;
+
+}
+
+
+// Implementation of the calculateMIPS member function
+double Computer::calculateMIPS(Program program) {
+    // Global MIPS calculation based on instruction counts
+    double MIPS = ((program.numTotal) / Computer::calculateExecutionTime(Program program))/ 1e6;
+
+    return MIPS;
+
+}
