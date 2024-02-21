@@ -60,6 +60,16 @@ int main() {
     std::cout << " Cpu 3, global MIPS:" << myComputer3.calculateglobalMIPS() << std::endl;
 
     std::cout << "\n Cpu 1, program A MIPS:" << myComputer1.calculateMIPS(myProgramA) << std::endl;
+    std::cout << " Cpu 1, program B MIPS:" << myComputer1.calculateMIPS(myProgramB) << std::endl;
+    std::cout << " Cpu 1, program C MIPS:" << myComputer1.calculateMIPS(myProgramC) << std::endl;
+
+    std::cout << "\n Cpu 2, program A MIPS:" << myComputer2.calculateMIPS(myProgramA) << std::endl;
+    std::cout << " Cpu 2, program B MIPS:" << myComputer2.calculateMIPS(myProgramB) << std::endl;
+    std::cout << " Cpu 2, program C MIPS:" << myComputer2.calculateMIPS(myProgramC) << std::endl;
+
+    std::cout << "\n Cpu 3, program A MIPS:" << myComputer3.calculateMIPS(myProgramA) << std::endl;
+    std::cout << " Cpu 3, program B MIPS:" << myComputer3.calculateMIPS(myProgramB) << std::endl;
+    std::cout << " Cpu 3, program C MIPS:" << myComputer3.calculateMIPS(myProgramC) << std::endl;
     // Example of additional functionality could be added here
     // such as calculating the execution time of the program on the computer
 
