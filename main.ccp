@@ -4,18 +4,46 @@
 
 int main() {
     // Create a Computer instance with example specifications
-    Computer myComputer(3.5, 1.2, 1.3, 1.4, 1.5);
+    Computer myComputer1(1, 2, 2, 3, 4);
+    // Create second computer instance
+    Computer myComputer2(1.2, 2, 3, 4, 3);
+    // Create second computer instance
+    Computer myComputer3(2, 2, 2, 4, 6);
 
-    // Create a Program instance with example instruction counts
-    Program myProgram(100, 200, 300, 400);
 
-    // Print the computer's stats
-    std::cout << "Computer Stats:" << std::endl;
-    myComputer.printStats();
+    // Create Program A instance with example instruction counts
+    Program myProgramA(2000, 100, 100, 50);
+    Program myProgramB(2000, 0.10, 0.40, 0.25);
+    Program myProgramC(500, 100, 2000, 200);
+
+
+    // Print the firtst computer's stats
+    std::cout << "Computer 1 Stats:" << std::endl;
+    myComputer1.printStats();
+    std::cout << std::endl;
+
+     // Print the second computer's stats
+    std::cout << "Computer 2 Stats:" << std::endl;
+    myComputer2.printStats();
+    std::cout << std::endl;
 
     // Print the program's stats
-    std::cout << "\nProgram Stats:" << std::endl;
-    myProgram.printStats();
+    std::cout << "\nProgram A Stats:" << std::endl;
+    myProgramA.printStats();
+    std::cout << std::endl;
+
+    std::cout << "\nProgram B Stats:" << std::endl;
+    myProgramB.printStats();
+    std::cout << std::endl;
+
+    std::cout << "\nProgram C Stats:" << std::endl;
+    myProgramC.printStats();
+    std::cout << std::endl;
+
+    //execution times per computer for each program:
+    std::cout << "\n Cpu 1, program A execution time:" << myComputer1.calculateExecutionTime(myProgramA) << " s" << std::endl;
+    std::cout << "\n Cpu 1, program B execution time:" << myComputer1.calculateExecutionTime(myProgramB) << " s" << std::endl;
+    std::cout << "\n Cpu 1, program C execution time:" << myComputer1.calculateExecutionTime(myProgramC) << " s" << std::endl;
 
     // Example of additional functionality could be added here
     // such as calculating the execution time of the program on the computer
