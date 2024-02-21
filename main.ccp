@@ -40,11 +40,26 @@ int main() {
     myProgramC.printStats();
     std::cout << std::endl;
 
-    //execution times per computer for each program:
     std::cout << "\n Cpu 1, program A execution time:" << myComputer1.calculateExecutionTime(myProgramA) << " s" << std::endl;
-    std::cout << "\n Cpu 1, program B execution time:" << myComputer1.calculateExecutionTime(myProgramB) << " s" << std::endl;
-    std::cout << "\n Cpu 1, program C execution time:" << myComputer1.calculateExecutionTime(myProgramC) << " s" << std::endl;
+    std::cout << " Cpu 1, program B execution time:" << myComputer1.calculateExecutionTime(myProgramB) << " s" << std::endl;
+    std::cout << " Cpu 1, program C execution time:" << myComputer1.calculateExecutionTime(myProgramC) << " s" << std::endl;
 
+    std::cout << "\n Cpu 2, program A execution time:" << myComputer2.calculateExecutionTime(myProgramA) << " s" << std::endl;
+    std::cout << " Cpu 2, program B execution time:" << myComputer2.calculateExecutionTime(myProgramB) << " s" << std::endl;
+    std::cout << " Cpu 2, program C execution time:" << myComputer2.calculateExecutionTime(myProgramC) << " s" << std::endl;
+
+    std::cout << "\n Cpu 3, program A execution time:" << myComputer3.calculateExecutionTime(myProgramA) << " s" << std::endl;
+    std::cout << " Cpu 3, program B execution time:" << myComputer3.calculateExecutionTime(myProgramB) << " s" << std::endl;
+    std::cout << " Cpu 3, program C execution time:" << myComputer3.calculateExecutionTime(myProgramC) << " s" << std::endl;
+
+
+    // Global MIPS per cpu:
+
+    std::cout << "\n Cpu 1, global MIPS:" << myComputer1.calculateglobalMIPS() << std::endl;
+    std::cout << " Cpu 2, global MIPS:" << myComputer2.calculateglobalMIPS() << std::endl;
+    std::cout << " Cpu 3, global MIPS:" << myComputer3.calculateglobalMIPS() << std::endl;
+
+    std::cout << "\n Cpu 1, program A MIPS:" << myComputer1.calculateMIPS(myProgramA) << std::endl;
     // Example of additional functionality could be added here
     // such as calculating the execution time of the program on the computer
 
