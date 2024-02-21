@@ -23,8 +23,12 @@ public:
 
     // Member function to calculate the execution time of a Program in seconds
     double calculateExecutionTime(Program);
-    
-    double calculateMIPS(void);
+
+    //Member function to calculate global MIPS of a computer
+    double calculateglobalMIPS();
+
+    //Member function to calculate global MIPS of a computer running specific program
+    double calculateMIPS(Program);
 };
 
 #endif // COMPUTER_H
