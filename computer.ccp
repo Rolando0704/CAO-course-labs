@@ -47,7 +47,8 @@ double Computer::calculateglobalMIPS() {
 // Implementation of the calculateMIPS member function
 double Computer::calculateMIPS(Program program) {
     // Global MIPS calculation based on instruction counts
-    double MIPS = ((program.numTotal) / Computer::calculateExecutionTime(Program program))/ 1e6;
+    double executionTime = calculateExecutionTime(program);
+    double MIPS = ((program.numTotal) / executionTime)/ 1e6;
 
     return MIPS;
 
