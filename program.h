@@ -2,14 +2,17 @@
 #define PROGRAM_H
 
 class Program {
-private:
+
+
+public:
+
     int numArith;    // Number of arithmetic instructions
     int numStore;    // Number of store instructions
     int numLoad;     // Number of load instructions
     int numBranch;   // Number of branch instructions
     int numTotal;    // Total number of instructions
 
-public:
+
     // Constructor to initialize the program's instructions
     Program(int arith, int store, int load, int branch)
         : numArith(arith), numStore(store), numLoad(load), numBranch(branch) {
