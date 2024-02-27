@@ -1,51 +1,31 @@
-
+#include "registers.h"
 #include "instruction.h"
 #include <iostream>
+#include <vector>
 
-using namespace std;
+int main() {
+    Registers cpuRegisters;
+    cpuRegisters.setRegister(1, 10); // R1 = 10
+    cpuRegisters.setRegister(2, 20); // R2 = 20
 
-// AddInstruction implementation
-AddInstruction::AddInstruction(int rs, int rt, int rd) : rs(rs), rt(rt), rd(rd) {}
+    std::vector<Instruction*> instructions;
 
-void AddInstruction::execute(Registers *registers) const {
-    registers->setRegister(registers->getRegister(rs) + registers->getRegister(rt), rd);
-}
+    instructions.push_back(new AddInstruction(1, 2, 3)); // R3 = R1 + R2
+    instructions.push_back(new SubInstruction(2, 1, 4)); // R4 = R2 - R1
+    instructions.push_back(new OriInstruction(1, 5, 0xFF)); // R5 = R1 | 0xFF
+    instructions.push_back(new BrneInstruction(1, 2, 4)); // if R1 != R2, PC += 4
 
-void AddInstruction::disassemble() const {
-    cout << "ADD R" << rd << ", R" << rs << ", R" << rt << endl;
-}
-
-// SubInstruction implementation
-SubInstruction::SubInstruction(int rs, int rt, int rd) : rs(rs), rt(rt), rd(rd) {}
-
-void SubInstruction::execute(Registers *registers) const {
-    registers->setRegister(registers->getRegister(rs) - registers->getRegister(rt), rd);
-}
-
-void SubInstruction::disassemble() const {
-    cout << "SUB R" << rd << ", R" << rs << ", R" << rt << endl;
-}
-
-// OriInstruction implementation
-OriInstruction::OriInstruction(int rs, int rt, int immediate) : rs(rs), rt(rt), immediate(immediate) {}
-
-void OriInstruction::execute(Registers *registers) const {
-    registers->setRegister(registers->getRegister(rs) | immediate, rt);
-}
-
-void OriInstruction::disassemble() const {
-    cout << "ORI R" << rt << ", R" << rs << ", #" << immediate << endl;
-}
-
-// BrneInstruction implementation
-BrneInstruction::BrneInstruction(int rs, int rt, int offset) : rs(rs), rt(rt), offset(offset) {}
-
-void BrneInstruction::execute(Registers *registers) const {
-    if (registers->getRegister(rs) != registers->getRegister(rt)) {
-        registers->setPC(registers->getPC() + offset);
+    // Execute and disassemble instructions
+    for (size_t i = 0; i < instructions.size(); ++i) {
+        instructions[i]->execute(&cpuRegisters);
+        instructions[i]->disassemble();
+        cpuRegisters.print();
     }
-}
 
-void BrneInstruction::disassemble() const {
-    cout << "BRNE R" << rs << ", R" << rt << ", PC+" << offset << endl;
+    // Clean up instructions
+    for (size_t i = 0; i < instructions.size(); ++i) {
+        delete instructions[i];
+    }
+
+    return 0;
 }
