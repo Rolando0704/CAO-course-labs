@@ -1,3 +1,75 @@
+
+#include "registers.h"
+#include "instruction.h"
+#include <iostream>
+#include <vector>
+
+// Function to append instructions to the program
+void appendInstruction(std::vector<Instruction*>& instructions, Instruction* instr) {
+    instructions.push_back(instr);
+}
+
+int main() {
+    Registers cpuRegisters;
+
+    // Instructions vector
+    std::vector<Instruction*> instructions;
+
+    // Append MIPS instructions to the instructions vector
+    appendInstruction(instructions, new OriInstruction(0, 17, 12)); // ori $s1, $0, 12
+    appendInstruction(instructions, new OriInstruction(0, 18, 4));  // ori $s2, $0, 4
+    appendInstruction(instructions, new OriInstruction(0, 19, 1));  // ori $s3, $0, 1
+
+// Append loop instructions to the instructions vector
+appendInstruction(instructions, new AddInstruction(4, 1, 4));  // add $s4, $s4, $s1
+appendInstruction(instructions, new SubInstruction(2, 3, 2));  // sub $s2, $s2, $s3
+appendInstruction(instructions, new BrneInstruction(2, 0, -2)); // brne $s2, $0, loop start
+
+// Set the program counter to the start of the loop, which is the fifth instruction
+cpuRegisters.setPC(4 * 4); // Assuming instructions are 4 bytes each
+
+// Execute the loop using BrneInstruction
+while (true) {
+    instructions[3]->execute(&cpuRegisters); // add $s4, $s4, $s1
+    instructions[3]->disassemble();
+    cpuRegisters.print();
+
+    instructions[4]->execute(&cpuRegisters); // sub $s2, $s2, $s3
+    instructions[4]->disassemble();
+    cpuRegisters.print();
+
+    instructions[5]->execute(&cpuRegisters); // brne $s2, $0, loop start
+    instructions[5]->disassemble();
+
+    if (cpuRegisters.getPC() != 4 * 4) { // If PC is not pointing to the loop start, break
+        break;
+    }
+}
+    // Print initial register state
+    cpuRegisters.print();
+
+
+    // Clean up instructions
+    for (size_t i = 0; i < instructions.size(); ++i) {
+        delete instructions[i];
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "registers.h"
 #include "instruction.h"
 #include <iostream>
@@ -94,3 +166,43 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+/*
+// ... [Other code]
+
+// Append loop instructions to the instructions vector
+appendInstruction(instructions, new AddInstruction(4, 1, 4));  // add $s4, $s4, $s1
+appendInstruction(instructions, new SubInstruction(2, 3, 2));  // sub $s2, $s2, $s3
+appendInstruction(instructions, new BrneInstruction(2, 0, -2)); // brne $s2, $0, loop start
+
+// Set the program counter to the start of the loop, which is the fifth instruction
+cpuRegisters.setPC(4 * 4); // Assuming instructions are 4 bytes each
+
+// Execute the loop using BrneInstruction
+while (true) {
+    instructions[3]->execute(&cpuRegisters); // add $s4, $s4, $s1
+    instructions[3]->disassemble();
+    cpuRegisters.print();
+
+    instructions[4]->execute(&cpuRegisters); // sub $s2, $s2, $s3
+    instructions[4]->disassemble();
+    cpuRegisters.print();
+
+    instructions[5]->execute(&cpuRegisters); // brne $s2, $0, loop start
+    instructions[5]->disassemble();
+
+    if (cpuRegisters.getPC() != 4 * 4) { // If PC is not pointing to the loop start, break
+        break;
+    }
+}
+
+// ... [Rest of the code]
+*/
