@@ -1,0 +1,115 @@
+
+    .text
+    j    main            # Jump to main-routine
+
+    .data
+str1:        .asciiz "Insert the array size \n"
+str2:        .asciiz "Insert the array elements,one per line  \n"
+str3:        .asciiz "The sorted array is : \n"
+str5:        .asciiz "\n"
+
+    .text
+    .globl    main
+main: 
+    la    $a0, str1        # Load address of str1 into $a0
+    li    $v0, 4           # System call for print string
+    syscall                # Execute system call
+
+    li    $v0, 5           # System call for read integer
+    syscall                # Execute system call
+    move    $s2, $v0       # Move read integer into $s2 (array size)
+    sll    $s0, $v0, 2     # Calculate space needed for array ($s0 = array size * 4 bytes)
+    sub    $sp, $sp, $s0   # Adjust stack pointer to allocate space for array
+
+    la    $a0, str2        # Load address of str2 into $a0
+    li    $v0, 4           # System call for print string
+    syscall                # Execute system call
+
+    move    $s1, $zero     # Counter for array input loop
+read_loop:
+    bge    $s1, $s2, done_reading   # If counter >= array size, done reading
+    li    $v0, 5           # System call for read integer
+    syscall                # Execute system call
+    sll    $t0, $s1, 2     # Calculate offset for current integer ($t0 = counter * 4)
+    add    $t1, $sp, $t0   # Calculate address for current integer ($t1 = $sp + offset)
+    sw    $v0, 0($t1)      # Store read integer at calculated address
+    addi   $s1, $s1, 1     # Increment counter
+    j      read_loop
+done_reading:
+
+    move   $a0, $sp        # Pass base address of array in $a0
+    move   $a1, $s2        # Pass size of array in $a1
+    jal    isort           # Call insertion sort
+
+    la    $a0, str3        # Load address of str3 into $a0
+    li    $v0, 4           # System call for print string
+    syscall                # Execute system call
+
+    move   $s1, $zero      # Counter for print loop
+print_loop:
+    bge    $s1, $s2, done_printing  # If counter >= array size, done printing
+    sll    $t0, $s1, 2     # Calculate offset for current integer ($t0 = counter * 4)
+    add    $t1, $sp, $t0   # Calculate address for current integer ($t1 = $sp + offset)
+    lw     $a0, 0($t1)     # Load integer at calculated address into $a0
+    li     $v0, 1          # System call for print integer
+    syscall                # Execute system call
+    la     $a0, str5       # Load address of newline string into $a0
+    li     $v0, 4          # System call for print string
+    syscall                # Execute system call
+    addi   $s1, $s1, 1     # Increment counter
+    j      print_loop
+done_printing:
+
+    add    $sp, $sp, $s0   # Deallocate array space from stack
+    li     $v0, 10         # System call for exit
+    syscall                # Execute system call
+
+
+# Insertion Sort Implementation (isort)
+.globl isort
+isort:
+    addi $sp, $sp, -4         # Save space for the temporary variable
+    sw $ra, 0($sp)            # Save return address
+    li $t3, 1                 # Start from the second element of the array
+    sll $t5, $a1, 2           # Calculate the array's byte size for bounds checking
+    add $t5, $a0, $t5         # $t5 now points just past the end of the array
+    
+    outer_loop:
+        # Check if we are past the end of the array
+        add $t6, $a0, $t3
+        sll $t6, $t6, 2
+        add $t6, $t6, $a0       # Address of the current element to insert
+        blt $t6, $t5, outer_loop_end
+        
+        lw $t7, 0($t6)          # Load the current element to be inserted
+        move $t8, $t3
+        
+        inner_loop:
+            sll $t9, $t8, 2
+            add $t9, $a0, $t9
+            sub $t9, $t9, 4      # Move to the previous element
+            lw $t0, 0($t9)       # Load the previous element
+            
+            # Check if we need to shift
+            blez $t8, inner_loop_end
+            blt $t7, $t0, shift_element
+            
+            j inner_loop_end
+            
+            shift_element:
+                sw $t0, 4($t9)   # Shift the previous element right
+                subi $t8, $t8, 1 # Move to the next previous element
+                j inner_loop
+            
+        inner_loop_end:
+            sll $t8, $t8, 2
+            add $t8, $a0, $t8    # Calculate the correct position for insertion
+            sw $t7, 0($t8)       # Insert the element
+            
+            addi $t3, $t3, 1     # Move to the next element
+            j outer_loop
+        
+    outer_loop_end:
+        lw $ra, 0($sp)          # Restore the return address
+        addi $sp, $sp, 4        # Free the space for the temporary variable
+        jr $ra                  # Return from the function
