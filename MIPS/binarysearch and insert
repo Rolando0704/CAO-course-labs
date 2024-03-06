@@ -1,0 +1,74 @@
+
+.data
+array:  .word 10, 20, 30, 40, 50  # Initial sorted array
+elem:   .word 5                  # Element to insert
+
+.text
+.globl main
+
+main:
+    la $a0, array                # Load base address of the array into $a0
+    li $a1, 5                    # Load length of the array into $a1 (5 elements)
+    lw $a2, elem                 # Load element to insert into $a2 (25)
+    li $t1, -1                   # Initialize low = -1
+    move $t2, $a1                # Initialize high = length of array
+
+    # Binary search to find the insertion index
+    jal binary_search            # Jump to binary search
+    move $a3, $v0                # Move the result of binary search (insertion index) to $a3
+
+    # Insert the element at the calculated position
+    jal insert                   # Jump to insert function
+
+    # Exit program (Assuming usage of SPIM or MARS simulator)
+    li $v0, 10                   # Load exit syscall code into $v0
+    syscall                      # Make syscall to exit program
+
+insert:
+    addi $t0, $a1, -1            # j = length - 1
+    sll $a3, $a3, 2              # i = i * 4 (to convert array index to byte offset)
+    sll $t0, $t0, 2              # j = j * 4 (to convert array index to byte offset)
+
+loop_start:
+    blt $t0, $a3, insert_end     # if j < i, exit loop
+    add $t1, $t0, $a0            # address of a[j]
+    lw $t2, 0($t1)               # t2 = a[j]
+    addi $t1, $t1, 4             # address of a[j+1]
+    sw $t2, 0($t1)               # a[j+1] = t2
+    addi $t0, $t0, -4            # j = j - 1 (in byte offsets, hence -4)
+    j loop_start                 # repeat loop
+
+insert_end:
+    add $t1, $a0, $a3            # address of a[i]
+    sw $a2, 0($t1)               # a[i] = elem
+    jr $ra                       # return to caller
+
+binary_search:
+    # Initialize
+    move $t1, $t1                # Low
+    move $t2, $t2                # High
+    lw $t3, elem                 # Element to insert
+
+binary_search_loop:
+    addi $t4, $t1, 1             # $t4 = low + 1
+    sub $t5, $t2, $t4            # $t5 = high - (low + 1)
+    blez $t5, binary_search_end  # Exit loop if high <= low + 1
+
+    add $t6, $t1, $t2            # $t6 = low + high
+    sra $t6, $t6, 1              # $t6 = (low + high) / 2
+    sll $t7, $t6, 2              # Convert index to byte offset
+    add $t7, $t7, $a0            # Get address of array[mid]
+    lw $t8, 0($t7)               # Load array[mid]
+
+    bge $t8, $t3, update_high    # If array[mid] >= elem
+    addi $t1, $t6, 1             # Update low
+    j binary_search_loop
+
+update_high:
+    move $t2, $t6                # Update high
+    j binary_search_loop
+
+binary_search_end:
+    move $v0, $t2                # Return high as insertion index
+    jr $ra                       # Return to main
+
