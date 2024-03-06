@@ -1,7 +1,7 @@
 
 .data
 array:  .word 10, 20, 30, 40, 50  # Initial sorted array
-elem:   .word 5                  # Element to insert
+elem:   .word 15                  # Element to insert
 
 .text
 .globl main
@@ -50,7 +50,8 @@ binary_search:
     lw $t3, elem                 # Element to insert
 
 binary_search_loop:
-    addi $t4, $t1, 1             # $t4 = low + 1
+    #addi $t4, $t1, 1             # $t4 = low + 1
+    move $t4, $t1
     sub $t5, $t2, $t4            # $t5 = high - (low + 1)
     blez $t5, binary_search_end  # Exit loop if high <= low + 1
 
