@@ -1,0 +1,45 @@
+#include <stdint.h>
+#include "LPC13xx.h"    // MCU-specific header file
+#include "delay.h"      // Delay functions
+
+#define LED_PORT 3         // Assuming LED is connected to Port 3
+#define LED_PIN  (1 << 0)  // LED pin is the third bit (P3_3)
+
+// Function prototypes
+void init_led(void);
+void led_on(void);
+void led_off(void);
+
+// Initialize GPIO port for the LED as output
+void init_led(void) {
+    LPC_GPIO3->DIR |= LED_PIN; // Set LED pin as output
+}
+
+// Turn the LED on
+void led_on(void) {
+    LPC_GPIO3->DATA |= LED_PIN; // Set the LED pin high
+}
+
+// Turn the LED off
+void led_off(void) {
+    LPC_GPIO3->DATA &= ~LED_PIN; // Set the LED pin low
+}
+
+
+// Main function
+int main(void) {
+    // Initialize the LED
+    init_led();
+
+    // Infinite loop
+    while (1) {
+        // Turn the LED on
+        led_on();
+        // Wait for 500ms
+        delay_ms(500);
+        // Turn the LED off
+        led_off();
+        // Wait for 500ms
+        delay_ms(500);
+    }
+}
