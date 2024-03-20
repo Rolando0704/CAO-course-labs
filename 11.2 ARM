@@ -26,6 +26,16 @@ void led_off(void) {
     LPC_GPIO3->DATA |= (1 << 0); // Set the LED pin high to turn the LED off
 }
 
+// Initialize the button using CMSIS
+void init_button(void) {
+    LPC_GPIO0->DIR &= ~BUTTON_PIN; // Set the button pin as input
+}
+
+// Check if button 1 is pressed
+bool but1_pressed(void) {
+    return !(LPC_GPIO0->DATA & BUTTON_PIN); // Return true if button is pressed
+}
+
 void blink(void) {
             // Turn the LED on
         led_on();
