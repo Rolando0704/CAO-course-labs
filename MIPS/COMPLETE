@@ -39,6 +39,7 @@ for_get:	bge	$s1, $a1, exit_get	# if i>=n go to exit_for_get
 		addi	$s1, $s1, 1		# i=i+1
 		j	for_get
 exit_get:	move	$a0, $sp		# $a0=base address af the array
+		addi $a1, $a1, -1
 		jal	sort_loop			
 						# In this moment the array has been 
 						# sorted and is in the stack frame 
@@ -46,6 +47,7 @@ exit_get:	move	$a0, $sp		# $a0=base address af the array
 exit_get2:
 		la	$a0, str3		# Print of str3
 		li	$v0, 4
+		addi $a1, $a1, 1
 		syscall
 
 		move	$s1, $zero		# i=0
@@ -53,7 +55,7 @@ exit_get2:
 for_print:  bge $s1, $a1, exit_print  # if i>=n go to exit_print
             sll $t0, $s1, 2           # $t0=i*4
             add $t1, $sp, $t0         # $t1=address of a[i]
-            lw  $a0, 4($t1)           # <-- Here is the mistake
+            lw  $a0, 0($t1)           # <-- Here is the mistake
             li  $v0, 1                # print of the element a[i]
             syscall
 
@@ -106,7 +108,7 @@ insert_end:
 
 binary_search:
     # Initialize
-    move $t1, $t1                # Low
+    li $t1, 0  
     move $t2, $t2                # High
 
 binary_search_loop:
